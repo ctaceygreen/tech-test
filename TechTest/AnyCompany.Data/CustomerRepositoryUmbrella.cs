@@ -15,13 +15,19 @@ namespace AnyCompany.Data
             _context = context;
         }
 
-        public void Create(Customer customer)
+        public int Create(Customer customer)
         {
             using (var command = _context.CreateCommand())
             {
                 command.CommandText = CustomerRepository.CreateCommandCreateCustomer();
                 command.Parameters.Add(_context.CreateParameter("@Name", customer.Name));
                 command.Parameters.Add(_context.CreateParameter("@Country", customer.Country));
+                command.Parameters.Add(_context.CreateParameter("@DateOfBirth", customer.DateOfBirth));
+                var returnParam = _context.CreateOutputParameter("@Id", SqlDbType.Int);
+                command.Parameters.Add(returnParam);
+                command.ExecuteNonQuery();
+                int id = (int)returnParam.Value;
+                return id;
             }
         }
 

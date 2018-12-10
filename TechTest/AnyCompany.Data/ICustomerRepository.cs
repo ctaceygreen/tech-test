@@ -8,7 +8,7 @@ namespace AnyCompany.Data
 {
     public interface ICustomerRepository
     {
-        void Create(Customer customer);
+        int Create(Customer customer);
         IEnumerable<Customer> GetAll();
         IEnumerable<Customer> GetAllWithOrders();
     }

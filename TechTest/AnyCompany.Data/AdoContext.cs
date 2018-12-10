@@ -34,6 +34,12 @@ namespace AnyCompany.Data
         {
             return new SqlParameter(paramName, paramValue);
         }
+        public SqlParameter CreateOutputParameter(string paramName, SqlDbType type)
+        {
+            SqlParameter IDParameter = new SqlParameter("@ID", type);
+            IDParameter.Direction = ParameterDirection.Output;
+            return IDParameter;
+        }
         public void SaveChanges()
         {
             _transaction.Commit();

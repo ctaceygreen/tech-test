@@ -8,7 +8,7 @@ namespace AnyCompany.Data
     {
         public static string CreateCommandCreateCustomer()
         {
-            return "INSERT INTO Customers VALUES (@Name, @Country)";
+            return "INSERT INTO Customers VALUES (@Name, @Country, @DateOfBirth)";
         }
 
         public static string CreateCommandGetAll()
