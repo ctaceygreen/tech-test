@@ -9,7 +9,7 @@ namespace AnyCompany.Data
 {
     public class CustomerRepositoryUmbrella : ICustomerRepository
     {
-        private AdoContext _context;
+        private ISqlDataContext _context;
         public CustomerRepositoryUmbrella(AdoContext context)
         {
             _context = context;

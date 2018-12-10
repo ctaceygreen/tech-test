@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace AnyCompany.Data
 {
-    public class AdoContext : IDisposable
+    public class AdoContext : ISqlDataContext
     {
         private IDbConnection _connection;
         private IDbTransaction _transaction;

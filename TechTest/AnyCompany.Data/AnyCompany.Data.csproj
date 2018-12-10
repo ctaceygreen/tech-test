@@ -47,6 +47,7 @@
     <Compile Include="CustomerRepository.cs" />
     <Compile Include="CustomerRepositoryUmbrella.cs" />
     <Compile Include="ICustomerRepository.cs" />
+    <Compile Include="ISqlDataContext.cs" />
     <Compile Include="IOrderRepository.cs" />
     <Compile Include="IUoW.cs" />
     <Compile Include="Order.cs" />

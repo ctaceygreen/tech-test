@@ -8,7 +8,7 @@ namespace AnyCompany.Data
 {
     class OrderRepositoryUmbrella : IOrderRepository
     {
-        private AdoContext _context;
+        private ISqlDataContext _context;
         public OrderRepositoryUmbrella(AdoContext context)
         {
             _context = context;
