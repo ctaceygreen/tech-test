@@ -41,10 +41,21 @@ namespace AnyCompany.Data
                 var reader = command.ExecuteReader();
                 while (reader.Read())
                 {
-                    customers.Add(new Customer { });
+                    customers.Add(CustomerFromReader(reader));
                 }
             }
             return customers;
+        }
+
+        public Customer CustomerFromReader(IDataReader reader)
+        {
+            return new Customer
+            {
+                Name = reader["Name"].ToString(),
+                DateOfBirth = DateTime.Parse(reader["DateOfBirth"].ToString()),
+                Country = reader["Country"].ToString(),
+                Id = int.Parse(reader["Id"].ToString())
+            };
         }
 
         public IEnumerable<Customer> GetAllWithOrders()
@@ -57,8 +68,17 @@ namespace AnyCompany.Data
                 var reader = command.ExecuteReader();
                 while (reader.Read())
                 {
-                    var customer = new Customer { }; // Create customer from customer data
-                    var order = new Order { }; // Create order from order data
+                    // Create customer from customer data
+                    var customer = CustomerFromReader(reader); 
+                    // Create order from order data
+                    var order = new Order
+                    {
+                        Amount = decimal.Parse(reader["Amount"].ToString()),
+                        CustomerId = customer.Id,
+                        Id = int.Parse(reader["Id"].ToString()),
+                        VAT = decimal.Parse(reader["VAT"].ToString())
+                    }; 
+
                     if (ordersByCustomer.ContainsKey(customer))
                     {
                         //Then just add this order data
