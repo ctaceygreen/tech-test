@@ -4,13 +4,14 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{C7E15594-7D8F-4C18-9DD7-14F3FBB1572D}</ProjectGuid>
+    <ProjectGuid>{A218F84F-D1D4-43B0-9B7F-40ADA90846FF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AnyCompany</RootNamespace>
-    <AssemblyName>AnyCompany</AssemblyName>
+    <RootNamespace>AnyCompany.Data</RootNamespace>
+    <AssemblyName>AnyCompany.Data</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -31,6 +32,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -40,8 +42,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="OrderService.cs" />
+    <Compile Include="AdoContext.cs" />
+    <Compile Include="Customer.cs" />
+    <Compile Include="CustomerRepository.cs" />
+    <Compile Include="CustomerRepositoryUmbrella.cs" />
+    <Compile Include="ICustomerRepository.cs" />
+    <Compile Include="IOrderRepository.cs" />
+    <Compile Include="IUoW.cs" />
+    <Compile Include="Order.cs" />
+    <Compile Include="OrderRepository.cs" />
+    <Compile Include="OrderRepositoryUmbrella.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SqlUoW.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
