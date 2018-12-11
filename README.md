@@ -11,6 +11,7 @@ Notes on the system:
  - Dependency Injection. As much as possible, the system uses Autofac to inject repositories/services into required classes. This allows for easier unit testing, and just a better structure of project!
  - Order Processing. Orders can be processed in two ways: 1) Just using the NormalOrderSender which simply calls the OrderService. 2) Using the RabbitOrderSender which uses RabbitMQ to queue a new event to be processed. If you just want to use the normal order sender, please change the Registered type within IoCof OrderSendReceive project from RabbitOrderSender to NormalOrderSender. If you DO want to use RabbitMQ, please ensure it is installed, the service is running on the computer, and that you are running the OrderSendReceive program within this project.
  - Front-end. The front-end is WebApi combined with ReactJS to allow for realtime updates to the UI when you add orders. Ignore the design of the UI, I decided that it didn't need to look pretty for this test, so no validation and the simplest HTML has been used!
+
 With more time, what I would improve:
  - ReactJS. Separate into separate class files for each component.
  - Front-end validation.
