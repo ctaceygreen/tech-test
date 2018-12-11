@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Autofac, Version=4.8.1.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.4.8.1\lib\net45\Autofac.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -44,6 +47,7 @@
     <Compile Include="CustomerRequest.cs" />
     <Compile Include="CustomerService.cs" />
     <Compile Include="ICustomerService.cs" />
+    <Compile Include="IoC\ServicesModule.cs" />
     <Compile Include="IOrderService.cs" />
     <Compile Include="OrderRequest.cs" />
     <Compile Include="OrderService.cs" />
@@ -54,6 +58,9 @@
       <Project>{A218F84F-D1D4-43B0-9B7F-40ADA90846FF}</Project>
       <Name>AnyCompany.Data</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

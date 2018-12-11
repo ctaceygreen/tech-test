@@ -14,7 +14,5 @@ namespace AnyCompany.Data
         SqlParameter CreateParameter(string paramName, object paramValue);
         SqlParameter CreateOutputParameter(string paramName, SqlDbType type);
         void SaveChanges();
-
-
     }
 }

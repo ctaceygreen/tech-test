@@ -29,6 +29,7 @@ namespace AnyCompany.Services.Tests
             _mockOrderRepository = new Mock<IOrderRepository>();
             _mockCustomerRepository = new Mock<ICustomerRepository>();
             _mockCustomerService = new Mock<ICustomerService>();
+            _mockCustomerService.Setup(c => c.GetCustomer(It.IsAny<int>())).Returns(new Customer { Country = "UK" });
 
             _mockOrderRepository.Setup(c => c.Create(It.IsAny<Order>()));
 

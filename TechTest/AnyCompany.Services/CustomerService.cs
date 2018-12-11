@@ -35,6 +35,11 @@ namespace AnyCompany.Services
             return dbCustomerId;
         }
 
+        public Customer GetCustomer(int customerId)
+        {
+            return _uow.Customers.Load(customerId);
+        }
+
         public IEnumerable<Customer> ListCustomers()
         {
             return _uow.Customers.GetAll();

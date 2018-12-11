@@ -10,9 +10,27 @@ namespace AnyCompany.Data
     public class CustomerRepositoryUmbrella : ICustomerRepository
     {
         private ISqlDataContext _context;
-        public CustomerRepositoryUmbrella(AdoContext context)
+        public CustomerRepositoryUmbrella(ISqlDataContext context)
         {
             _context = context;
+        }
+
+        public Customer Load(int customerId)
+        {
+            List<Customer> customers = new List<Customer>();
+            using (var command = _context.CreateCommand())
+            {
+                command.CommandText = CustomerRepository.CreateCommandGetCustomer();
+                command.Parameters.Add(_context.CreateParameter("@Id", customerId));
+                var reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    customers.Add(CustomerFromReader(reader, false));
+                }
+                reader.Close();
+            }
+            _context.SaveChanges();
+            return customers.FirstOrDefault();
         }
 
         public int Create(Customer customer)
@@ -22,11 +40,10 @@ namespace AnyCompany.Data
                 command.CommandText = CustomerRepository.CreateCommandCreateCustomer();
                 command.Parameters.Add(_context.CreateParameter("@Name", customer.Name));
                 command.Parameters.Add(_context.CreateParameter("@Country", customer.Country));
-                command.Parameters.Add(_context.CreateParameter("@DateOfBirth", customer.DateOfBirth));
-                var returnParam = _context.CreateOutputParameter("@Id", SqlDbType.Int);
-                command.Parameters.Add(returnParam);
+                command.Parameters.Add(_context.CreateParameter("@DateOfBirth", customer.DateOfBirth.ToString("yyyy-MM-dd")));
                 command.ExecuteNonQuery();
-                int id = (int)returnParam.Value;
+                object returnObj = command.ExecuteScalar();
+                int id = int.Parse(returnObj.ToString());
                 return id;
             }
         }
@@ -41,26 +58,28 @@ namespace AnyCompany.Data
                 var reader = command.ExecuteReader();
                 while (reader.Read())
                 {
-                    customers.Add(CustomerFromReader(reader));
+                    customers.Add(CustomerFromReader(reader, false));
                 }
+                reader.Close();
             }
             return customers;
         }
 
-        public Customer CustomerFromReader(IDataReader reader)
+        public Customer CustomerFromReader(IDataReader reader, bool usingJoin)
         {
+            string customerId = usingJoin ? "Customer_Id" : "Id";
             return new Customer
             {
                 Name = reader["Name"].ToString(),
                 DateOfBirth = DateTime.Parse(reader["DateOfBirth"].ToString()),
                 Country = reader["Country"].ToString(),
-                Id = int.Parse(reader["Id"].ToString())
+                Id = int.Parse(reader[customerId].ToString())
             };
         }
 
         public IEnumerable<Customer> GetAllWithOrders()
         {
-            Dictionary<Customer, Customer> ordersByCustomer = new Dictionary<Customer, Customer>();
+            Dictionary<int, Customer> ordersByCustomer = new Dictionary<int, Customer>();
             using (var command = _context.CreateCommand())
             {
                 command.CommandType = CommandType.Text;
@@ -69,29 +88,30 @@ namespace AnyCompany.Data
                 while (reader.Read())
                 {
                     // Create customer from customer data
-                    var customer = CustomerFromReader(reader); 
+                    var customer = CustomerFromReader(reader, true); 
                     // Create order from order data
                     var order = new Order
                     {
                         Amount = decimal.Parse(reader["Amount"].ToString()),
                         CustomerId = customer.Id,
-                        Id = int.Parse(reader["Id"].ToString()),
+                        Id = int.Parse(reader["Order_Id"].ToString()),
                         VAT = decimal.Parse(reader["VAT"].ToString())
                     }; 
 
-                    if (ordersByCustomer.ContainsKey(customer))
+                    if (ordersByCustomer.ContainsKey(customer.Id))
                     {
                         //Then just add this order data
-                        ordersByCustomer[customer].Orders.Add(order);
+                        ordersByCustomer[customer.Id].Orders.Add(order);
                     }
                     else
                     {
                         //Not seen this customer before so add new
-                        var customerWithOrder = customer;
-                        customerWithOrder.Orders.Add(order);
-                        ordersByCustomer.Add(customer, customerWithOrder);
+                        //Clone customer for key, so we're not hashing on orders too
+                        customer.Orders.Add(order);
+                        ordersByCustomer.Add(customer.Id, customer);
                     }
                 }
+                reader.Close();
             }
             return ordersByCustomer.Select(c => c.Value);
         }

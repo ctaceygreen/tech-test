@@ -22,12 +22,15 @@ namespace AnyCompany.Services
             int customerId = -1;
             if (!orderRequest.CustomerId.HasValue || orderRequest.CustomerId == -1)
             {
-                customerId = _customerService.AddCustomer(new CustomerRequest { Country = orderRequest.CustomerCountry, Name = orderRequest.CustomerName });
+                customerId = _customerService.AddCustomer(new CustomerRequest { Country = orderRequest.CustomerCountry, Name = orderRequest.CustomerName, DateOfBirth = orderRequest.DateOfBirth });
                 
             }
             else
             {
                 customerId = orderRequest.CustomerId.Value;
+                Customer customer = _customerService.GetCustomer(customerId);
+                orderRequest.CustomerName = customer.Name;
+                orderRequest.CustomerCountry = customer.Country;
             }
             //Change order request into order object and add to uow
             Order order = new Order { Amount = orderRequest.Amount, CustomerId = customerId };

@@ -36,7 +36,7 @@ namespace AnyCompany.Data
         }
         public SqlParameter CreateOutputParameter(string paramName, SqlDbType type)
         {
-            SqlParameter IDParameter = new SqlParameter("@ID", type);
+            SqlParameter IDParameter = new SqlParameter(paramName, type);
             IDParameter.Direction = ParameterDirection.Output;
             return IDParameter;
         }
